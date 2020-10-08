@@ -27,7 +27,7 @@ questions_to_export = [
 for i in range( len(questions_to_export)): 
     url = 'https://metabase.ailo.io/api/card/' + str(questions_to_export[i]) 
     headers = {'X-Metabase-Session':headingToken} 
-    name_request = requests.get(url, headers=headers)
+
     csv_request = requests.post(url+'/query/csv', headers=headers)
     f = open('metabase/'+json.loads(name_request.text)["name"]+'.csv', "w")
     f.write(csv_request.text)
