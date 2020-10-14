@@ -39,13 +39,16 @@ def get_sheets_with_export_prefix(API):
                 export_titles.append( sheet['properties']['title'])
     return export_titles
 
+def get_sheet_data(API, sheet_title): 
+    return  (API.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=sheet_title).execute())["values"]
+
 def export_sheets(path=DIR): 
     metabaseSync.mkdir(path)
     credentials = uploadCSVToSheets.get_creds()
     API = build('sheets', 'v4', credentials=credentials)
     sheet_titles =  get_sheets_with_export_prefix(API)
     for i in range(len(sheet_titles)):  
-        data = (API.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=sheet_titles[i]).execute())["values"]
+        data = get_sheet_data(API, sheet_titles[i])
         with open(path + sheet_titles[i] + ".csv", "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerows(data)
