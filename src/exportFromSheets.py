@@ -52,5 +52,3 @@ def export_sheets(path=DIR):
         with open(path + sheet_titles[i] + ".csv", "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerows(data)
-
-export_sheets(DIR)
