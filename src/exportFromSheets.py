@@ -2,6 +2,7 @@ from __future__ import print_function
 #For Google Auth
 import google_auth_oauthlib
 import uploadCSVToSheets 
+import metabaseSync
 import csv
 
 #.env files
@@ -39,6 +40,7 @@ def get_sheets_with_export_prefix(API):
     return export_titles
 
 def export_sheets(path=DIR): 
+    metabaseSync.mkdir(path)
     credentials = uploadCSVToSheets.get_creds()
     API = build('sheets', 'v4', credentials=credentials)
     sheet_titles =  get_sheets_with_export_prefix(API)

@@ -47,7 +47,7 @@ def save_csv( question_index, question_name, data, path):
     print(question_name + " Saved" )      
 
 def fetch_and_save_questions(question_number_array=questions_to_export, save_path=path): 
-    mkdir()
+    mkdir(save_path)
     for i in range( len(question_number_array)): 
         responses = metabase_requests(question_number_array[i])
         save_csv(str(i), responses[0], responses[1],  save_path)
