@@ -24,9 +24,6 @@ questions_to_export = [
     72
 ]   
 
-#def createSet(question_id=none, csv_name=none,sheet_name=none):
-#    return {"question": question_id,"csv": csv_name, "sheet_name": sheet_name} 
-
 path = 'metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/'
 def mkdir(path=path): 
     if not os.path.exists(path):
@@ -47,7 +44,7 @@ def save_csv( question_index, question_name, data, path):
     f = open(path + question_index + "_" + question_name +'.csv', "w")
     f.write(data)
     f.close
-    print( responses[0] + " Saved" )      
+    print(question_name + " Saved" )      
 
 def fetch_and_save_questions(question_number_array=questions_to_export, save_path=path): 
     mkdir()

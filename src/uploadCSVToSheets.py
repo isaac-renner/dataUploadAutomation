@@ -17,28 +17,31 @@ from google.auth.transport.requests import Request
 import datetime
 import time
 
-# If modifying these scopes, delete the file token.pickle.
 scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID and range of a sample spreadsheet.
 SPREADSHEET_ID = '1Ph2LX-go4dcKNHezHD8DUtNP2fFO2C2gUPktBLvaPvQ'
-RANGE_NAME = 'A:E'
 
 #CSV Setup
-csv_path = '/Users/isaacrenner/Documents/automation/autoUpload/metabase/14-10-20/0_Legal Entities all.csv'
+DIR = 'metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
 
-#CSV Name x SheetUpload Tuple
+import fnmatch
 
-
-def main():
+def upload_file_to_sheets(path=DIR):
     credentials = get_creds()
     API = build('sheets', 'v4', credentials=credentials)
-    DIR = './metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
-    number_of_files = len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]) - 1
-    print(number_of_files)
+    number_of_files = len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]) 
+    for i in range(number_of_files): 
+        sheet_id = find_sheet_id_by_index(i, API)
+        csv_path = path + get_file(i, path) 
+        print(csv_path)
+        push_csv_to_gsheet(csv_path,sheet_id, API)
 
-    sheet_id = find_sheet_id_by_index(1, API)
-    push_csv_to_gsheet(csv_path,sheet_id, API)
+        
+def get_file(index, path): 
+    for file in os.listdir(path):
+        if fnmatch.fnmatch(file, str(index)+"*"): 
+            return file 
 
 def get_creds(): 
     creds = None
@@ -63,7 +66,6 @@ def get_creds():
     return creds
 
 def push_csv_to_gsheet(csv_path, sheet_id, API):
-    print(sheet_id)
     with open(csv_path, 'r') as csv_file:
         csvContents = csv_file.read()
     body = {
@@ -95,7 +97,3 @@ def find_sheet_id_by_index(index, API):
         if 'title' in sheet['properties'].keys():
             if sheet['properties']['index'] == index:
                 return sheet['properties']['sheetId']
-
-
-if __name__ == '__main__':
-    main()
