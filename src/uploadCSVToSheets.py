@@ -92,7 +92,6 @@ def find_sheet_id_by_index(index, API):
         .get(spreadsheetId=SPREADSHEET_ID, fields='sheets.properties') \
         .execute() \
         .get('sheets')
-
     for sheet in sheets_with_properties:
         if 'title' in sheet['properties'].keys():
             if sheet['properties']['index'] == index:
