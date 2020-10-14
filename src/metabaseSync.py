@@ -43,12 +43,14 @@ def metabase_requests(question_number):
     csv_request = requests.post(url+'/query/csv', headers=headers)
     return ( json.loads(name_request.text)["name"], csv_request.text) 
 
+def save_csv( question_index, question_name, data, path): 
+    f = open(path + question_index + "_" + question_name +'.csv', "w")
+    f.write(data)
+    f.close
+    print( responses[0] + " Saved" )      
 
-def fetch_and_save_questions(question_number_array=questions_to_export): 
+def fetch_and_save_questions(question_number_array=questions_to_export, save_path=path): 
     mkdir()
     for i in range( len(question_number_array)): 
         responses = metabase_requests(question_number_array[i])
-        f = open(path + str(i) + "_" + responses[0] +'.csv', "x")
-        f.write(responses[1])
-        f.close
-        print( responses[0] + " done" )      
+        save_csv(str(i), responses[0], responses[1],  save_path)
