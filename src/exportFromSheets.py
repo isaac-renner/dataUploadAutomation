@@ -2,6 +2,7 @@ from __future__ import print_function
 #For Google Auth
 import google_auth_oauthlib
 import uploadCSVToSheets 
+import csv
 
 #.env files
 import os
@@ -22,7 +23,7 @@ scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID and range of a sample spreadsheet.
 SPREADSHEET_ID = '1Ph2LX-go4dcKNHezHD8DUtNP2fFO2C2gUPktBLvaPvQ'
-DIR = 'metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
+DIR = 'sheets/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
 
 def get_sheets_with_export_prefix(API):
     sheets_with_properties = API \
@@ -30,16 +31,21 @@ def get_sheets_with_export_prefix(API):
         .get(spreadsheetId=SPREADSHEET_ID, fields='sheets.properties') \
         .execute() \
         .get('sheets')
-    export_ids = []
+    export_titles = []
     for sheet in sheets_with_properties:
         if 'title' in sheet['properties'].keys():
             if  "Export" in sheet['properties']['title']:
-                export_ids.append( sheet['properties']['sheetId'])
-    return export_sheets
+                export_titles.append( sheet['properties']['title'])
+    return export_titles
 
 def export_sheets(path=DIR): 
     credentials = uploadCSVToSheets.get_creds()
     API = build('sheets', 'v4', credentials=credentials)
-    print(get_sheets_with_export_prefix(API))
+    sheet_titles =  get_sheets_with_export_prefix(API)
+    for i in range(len(sheet_titles)):  
+        data = (API.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=sheet_titles[i]).execute())["values"]
+        with open(path + sheet_titles[i] + ".csv", "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerows(data)
 
-export_sheets()
+export_sheets(DIR)
