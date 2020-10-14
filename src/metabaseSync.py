@@ -24,6 +24,9 @@ questions_to_export = [
     72
 ]   
 
+#def createSet(question_id=none, csv_name=none,sheet_name=none):
+#    return {"question": question_id,"csv": csv_name, "sheet_name": sheet_name} 
+
 path = 'metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
 
 def mkdir(): 
@@ -33,16 +36,16 @@ def mkdir():
     else:
         print("Directory " , path,  " already exists")
 
+def main(): 
+    mkdir()
+    for i in range( len(questions_to_export)): 
+        url = 'https://metabase.ailo.io/api/card/' + str(questions_to_export[i]) 
+        headers = {'X-Metabase-Session':headingToken} 
+        name_request = requests.get(url, headers=headers)
+        csv_request = requests.post(url+'/query/csv', headers=headers)
+        f = open(path + str(i) + "_" + json.loads(name_request.text)["name"]+'.csv', "x")
+        f.write(csv_request.text)
+        f.close
+        print(  json.loads(name_request.text)["name"] + " done" )      
 
-mkdir()
-for i in range( len(questions_to_export)): 
-    url = 'https://metabase.ailo.io/api/card/' + str(questions_to_export[i]) 
-    headers = {'X-Metabase-Session':headingToken} 
-    name_request = requests.get(url, headers=headers)
-    csv_request = requests.post(url+'/query/csv', headers=headers)
-    print(csv_request.text)
-    f = open(path + json.loads(name_request.text)["name"]+'.csv', "x")
-    f.write(csv_request.text)
-    f.close
-
-print('done')
+main()

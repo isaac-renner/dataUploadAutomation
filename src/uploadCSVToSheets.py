@@ -24,6 +24,11 @@ RANGE_NAME = 'A:E'
 #CSV Setup
 csv_path = '/Users/isaacrenner/Documents/automation/metabase/09-10-20/Auto Pay Rent Enabled Since.csv' 
 
+#CSV Name x SheetUpload Tuple
+Arrays to Upload=[
+    
+]
+
 
 def main():
     credentials = get_creds()
