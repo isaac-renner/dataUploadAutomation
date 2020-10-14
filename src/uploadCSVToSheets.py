@@ -14,6 +14,9 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
+import datetime
+import time
+
 # If modifying these scopes, delete the file token.pickle.
 scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
@@ -22,19 +25,19 @@ SPREADSHEET_ID = '1Ph2LX-go4dcKNHezHD8DUtNP2fFO2C2gUPktBLvaPvQ'
 RANGE_NAME = 'A:E'
 
 #CSV Setup
-csv_path = '/Users/isaacrenner/Documents/automation/metabase/09-10-20/Auto Pay Rent Enabled Since.csv' 
+csv_path = '/Users/isaacrenner/Documents/automation/autoUpload/metabase/14-10-20/0_Legal Entities all.csv'
 
 #CSV Name x SheetUpload Tuple
-Arrays to Upload=[
-    
-]
 
 
 def main():
     credentials = get_creds()
     API = build('sheets', 'v4', credentials=credentials)
+    DIR = './metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
+    number_of_files = len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]) - 1
+    print(number_of_files)
 
-    sheet_id = find_sheet_id_by_name('Import Legal Entities', API)
+    sheet_id = find_sheet_id_by_index(1, API)
     push_csv_to_gsheet(csv_path,sheet_id, API)
 
 def get_creds(): 
@@ -60,6 +63,7 @@ def get_creds():
     return creds
 
 def push_csv_to_gsheet(csv_path, sheet_id, API):
+    print(sheet_id)
     with open(csv_path, 'r') as csv_file:
         csvContents = csv_file.read()
     body = {
@@ -80,7 +84,7 @@ def push_csv_to_gsheet(csv_path, sheet_id, API):
     response = request.execute()
     return response
 
-def find_sheet_id_by_name(sheet_name, API):
+def find_sheet_id_by_index(index, API):
     sheets_with_properties = API \
         .spreadsheets() \
         .get(spreadsheetId=SPREADSHEET_ID, fields='sheets.properties') \
@@ -89,7 +93,7 @@ def find_sheet_id_by_name(sheet_name, API):
 
     for sheet in sheets_with_properties:
         if 'title' in sheet['properties'].keys():
-            if sheet['properties']['title'] == sheet_name:
+            if sheet['properties']['index'] == index:
                 return sheet['properties']['sheetId']
 
 
