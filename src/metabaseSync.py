@@ -12,7 +12,9 @@ load_dotenv(os.path.join(project_folder, '.env'))
 headingToken = os.getenv("SESSIONID")
 
 questions_to_export = [
+    246, 
     56, 
+    250, 
     55, 
     61, 
     62, 
@@ -51,3 +53,5 @@ def fetch_and_save_questions(question_number_array=questions_to_export, save_pat
     for i in range( len(question_number_array)): 
         responses = metabase_requests(question_number_array[i])
         save_csv(str(i), responses[0], responses[1],  save_path)
+
+fetch_and_save_questions()

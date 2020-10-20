@@ -23,7 +23,7 @@ scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
 
 # The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1Ph2LX-go4dcKNHezHD8DUtNP2fFO2C2gUPktBLvaPvQ'
+SPREADSHEET_ID = os.getenv("SSID")
 DIR = 'sheets/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
 
 def get_sheets_with_export_prefix(API):

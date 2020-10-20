@@ -20,7 +20,7 @@ import time
 scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1Ph2LX-go4dcKNHezHD8DUtNP2fFO2C2gUPktBLvaPvQ'
+SPREADSHEET_ID = os.getenv("SSID")
 
 #CSV Setup
 DIR = 'metabase/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
@@ -32,8 +32,10 @@ def upload_file_to_sheets(path=DIR):
     API = build('sheets', 'v4', credentials=credentials)
     number_of_files = len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]) 
     for i in range(number_of_files): 
-        sheet_id = find_sheet_id_by_index(i, API)
+        #Required offset becasue there is an instructions page at index 0
+        sheet_id = find_sheet_id_by_index(i + 1, API)
         csv_path = path + get_file(i, path) 
+        print(sheet_id)
         print(csv_path)
         push_csv_to_gsheet(csv_path,sheet_id, API)
 
@@ -95,4 +97,7 @@ def find_sheet_id_by_index(index, API):
     for sheet in sheets_with_properties:
         if 'title' in sheet['properties'].keys():
             if sheet['properties']['index'] == index:
+                print(index)
+                print(sheet['properties']['index'])
+                print(sheet['properties']['title'])
                 return sheet['properties']['sheetId']
