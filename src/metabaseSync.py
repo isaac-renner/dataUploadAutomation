@@ -54,4 +54,3 @@ def fetch_and_save_questions(question_number_array=questions_to_export, save_pat
         responses = metabase_requests(question_number_array[i])
         save_csv(str(i), responses[0], responses[1],  save_path)
 
-fetch_and_save_questions()

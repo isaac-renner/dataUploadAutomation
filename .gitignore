@@ -5,3 +5,4 @@ metabase/
 sheets/
 credentials.json 
 *.pickle
+__pycache__/
