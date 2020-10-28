@@ -42,7 +42,7 @@ def upload_file_to_sheets(path=DIR):
         
 def get_file(index, path): 
     for file in os.listdir(path):
-        if fnmatch.fnmatch(file, str(index)+"*"): 
+        if fnmatch.fnmatch(file, str(index)+"_*"): 
             return file 
 
 def get_creds(): 
