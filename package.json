@@ -1,0 +1,20 @@
+{
+  "name": "CSVtoSegment",
+  "version": "1.0.0",
+  "main": "./src/segmentUpload.js",
+  "repository": "git@github.com:isaac-renner/dataUploadAutomation.git",
+  "author": "Isaac Renner <isaac@trunkplatform.com>",
+  "license": "MIT",
+  "scripts":{
+    "run": "python3 src/main.py && node src/segmentUpload.js" 
+  }, 
+  "dependencies": {
+    "analytics-node": "^3.4.0-beta.3",
+    "async": "^3.2.0",
+    "csvtojson": "^2.0.10",
+    "dotenv": "^8.2.0",
+    "fs": "^0.0.1-security",
+    "objects-node": "^1.0.0",
+    "path": "^0.12.7"
+  }
+}
