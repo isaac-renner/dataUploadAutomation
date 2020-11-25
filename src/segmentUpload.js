@@ -127,6 +127,7 @@ const sendToSegment = function(callback, srcFileName) {
         }
     );
 };
+
 var files = fs.readdirSync(`/Users/isaacrenner/Documents/automation/autoUpload/sheets/${new Date().toLocaleDateString().replace(/\//g, '-').slice(0,-2)}/` );
 files.forEach(file => 
     {
@@ -136,8 +137,3 @@ files.forEach(file =>
         }
     }
 )
-
-
-
-
-

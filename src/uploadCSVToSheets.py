@@ -30,15 +30,15 @@ import fnmatch
 def upload_file_to_sheets(path=DIR):
     credentials = get_creds()
     API = build('sheets', 'v4', credentials=credentials)
-    number_of_files = len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]) 
+    list_of_files =  [name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]
+    number_of_files = len(list_of_files) 
+    print(list_of_files)
     for i in range(number_of_files): 
         #Required offset becasue there is an instructions page at index 0
         sheet_id = find_sheet_id_by_index(i + 1, API)
         csv_path = path + get_file(i, path) 
-        print(sheet_id)
         print(csv_path)
         push_csv_to_gsheet(csv_path,sheet_id, API)
-
         
 def get_file(index, path): 
     for file in os.listdir(path):
@@ -101,3 +101,4 @@ def find_sheet_id_by_index(index, API):
                 print(sheet['properties']['index'])
                 print(sheet['properties']['title'])
                 return sheet['properties']['sheetId']
+
