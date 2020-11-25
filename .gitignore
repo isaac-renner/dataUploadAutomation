@@ -2,6 +2,7 @@
 *.swp
 *.swo
 metabase/
+to-save/
 sheets/
 credentials.json 
 *.pickle

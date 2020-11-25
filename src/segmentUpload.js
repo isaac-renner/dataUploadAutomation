@@ -26,7 +26,7 @@ const sendToSegment = function(callback, srcFileName) {
     async.waterfall([
         function download(next) {
             // Download the CSV from S3 into a buffer.
-            var filePath = '../sheets/'+ new Date().toLocaleDateString().replace(/\//g, '-').slice(0,-2) + '/' + srcFileName
+            var filePath = '../to-save/'+ new Date().toLocaleDateString().replace(/\//g, '-').slice(0,-2) + '/' + srcFileName
             console.log(filePath) 
             const data = fs.readFileSync(path.resolve(__dirname, filePath))
             next(null,data.toString())
@@ -128,11 +128,16 @@ const sendToSegment = function(callback, srcFileName) {
     );
 };
 
-var files = fs.readdirSync(`/Users/isaacrenner/Documents/automation/autoUpload/sheets/${new Date().toLocaleDateString().replace(/\//g, '-').slice(0,-2)}/` );
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+var files = fs.readdirSync(`/Users/isaacrenner/Documents/automation/autoUpload/to-save/${new Date().toLocaleDateString().replace(/\//g, '-').slice(0,-2)}/` );
 files.forEach(file => 
     {
         if(file.includes('Segment')){
-//            console.log(file)
+            sleep(60000)            
+            console.log(file)
             sendToSegment((data)=> (data) , file);
         }
     }
