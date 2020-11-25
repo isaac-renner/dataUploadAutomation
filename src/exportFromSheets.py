@@ -54,25 +54,27 @@ def export_sheets(path=DIR):
             writer.writerows(data)
 
 
-path = 'sheets/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
-list_of_files =  [name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]
-number_of_files = len(list_of_files) 
-print(list_of_files)
-file = 1
-for i in range(number_of_files): 
-    #Required offset becasue there is an instructions page at index 0
-    record_per_file = 100
-    csvfilename = open(path + list_of_files[i], 'r').readlines()
-    print(str(csvfilename))
-    #store header values
-    header = csvfilename[0] 
-    #remove header from list
-    csvfilename.pop(0) 
-    #Number of lines to be written in new file
-    for j in range(len(csvfilename)):
-        if j % record_per_file == 0:
-            write_file = csvfilename[j:j+record_per_file]
-            write_file.insert(0, header)
-            open(path + str('test')+ str(file) + '.csv', 'w+').writelines(write_file)
-            file += 1
+def split_csv():
+    path = 'sheets/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
+    path_to_save = 'to-save/' +  datetime.date.today().strftime("%d-%m-%y") + '/' 
+    metabaseSync.mkdir(path_to_save)
+    list_of_files =  [name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]
+    number_of_files = len(list_of_files) 
+    file = 1
+    for i in range(number_of_files): 
+        #Required offset becasue there is an instructions page at index 0
+        record_per_file = 100
+        print(list_of_files[i])
+        csvfilename = open(path + list_of_files[i], 'r').readlines()
+        #store header values
+        header = csvfilename[0] 
+        #remove header from list
+        csvfilename.pop(0) 
+        #Number of lines to be written in new file
+        for j in range(len(csvfilename)):
+            if j % record_per_file == 0:
+                write_file = csvfilename[j:j+record_per_file]
+                write_file.insert(0, header)
+                open(path_to_save + str(file) + list_of_files[i] , 'w+').writelines(write_file)
+                file += 1
 
